@@ -35,12 +35,10 @@ public class CardTest extends BaseTest {
     @Test
     void testCartActions() {
         page.navigate("https://the-internet.herokuapp.com/add_remove_elements/");
-
         // Добавление товара
         page.click("#add-to-cart");
         page.locator("#cart").screenshot(new Locator.ScreenshotOptions()
                 .setPath(getTimestampPath("cart_after_add.png")));
-
         // Удаление товара
         page.click("#remove-from-cart");
         page.locator("#cart").screenshot(new Locator.ScreenshotOptions()
