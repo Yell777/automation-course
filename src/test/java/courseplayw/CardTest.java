@@ -60,17 +60,7 @@ public class CardTest extends BaseTest {
     }
 
     @AfterEach
-    void attachScreenshotOnFailure(ExtensionContext extensionContext) {
-        // Проверяем наличие исключения
-        if (extensionContext.getExecutionException().isPresent()) {
-            byte[] screenshot = page.screenshot();
-            Allure.addAttachment(
-                    "Screenshot on Failure",
-                    "image/png",
-                    new ByteArrayInputStream(screenshot),
-                    ".png"
-            );
-        }
+    void teardown() {
         context.close();
     }
 }
