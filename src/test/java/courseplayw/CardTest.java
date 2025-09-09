@@ -11,15 +11,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
+
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class CardTest extends BaseTest {
     private BrowserContext context;
@@ -52,7 +50,28 @@ public class CardTest extends BaseTest {
 
 
     @AfterEach
-    void teardown() {
-        context.close();
+    void attachScreenshotOnFailure(ExtensionContext extensionContext) {
+        // Проверяем, упал ли тест
+        if (extensionContext.getExecutionException().isPresent()) {
+            try {
+                // Делаем скриншот через Playwright
+                byte[] screenshot = page.screenshot();
+
+                // Прикрепляем к Allure
+                Allure.addAttachment(
+                        "Failed Test Screenshot",
+                        "image/png",
+                        new ByteArrayInputStream(screenshot),
+                        ".png"
+                );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Закрываем контекст Playwright
+        if (context != null) {
+            context.close();
+        }
     }
 }
