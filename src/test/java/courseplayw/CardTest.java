@@ -13,15 +13,20 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 public class CardTest extends BaseTest {
     private BrowserContext context;
     private Page page;
+    private Path actualScreenshot;
 
 
     @BeforeEach
@@ -50,23 +55,10 @@ public class CardTest extends BaseTest {
 
 
     @AfterEach
-    void attachScreenshotOnFailure(ExtensionContext extensionContext) {
-        // Проверяем, упал ли тест
-        if (extensionContext.getExecutionException().isPresent()) {
-            try {
-                // Делаем скриншот через Playwright
-                byte[] screenshot = page.screenshot();
+    void attachScreenshotOnFailure() throws IOException {
 
-                // Прикрепляем к Allure
-                Allure.addAttachment(
-                        "Failed Test Screenshot",
-                        "image/png",
-                        new ByteArrayInputStream(screenshot),
-                        ".png"
-                );
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (actualScreenshot != null && Files.exists(actualScreenshot)) {
+            Files.delete(actualScreenshot);
         }
 
         // Закрываем контекст Playwright
