@@ -54,7 +54,6 @@ public class FileUploadTest {
                     )
             );
 
-
             assertTrue(uploadResponse.ok(), "Upload request failed: " + uploadResponse.statusText());
 
             String responseBody = uploadResponse.text();
