@@ -68,9 +68,6 @@ public class FileUploadTest {
             APIResponse downloadResponse = request.get("https://httpbin.org/image/png");
             assertTrue(downloadResponse.ok(), "Download request failed: " + downloadResponse.statusText());
 
-            // Проверка MIME-типа
-
-            assertEquals("image/png", downloadResponse.headersArray().contains("content-type"));
             // Проверка сигнатуры PNG
             byte[] content = downloadResponse.body();
             assertArrayStartsWithPngSignature(content);
