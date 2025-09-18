@@ -43,13 +43,17 @@ public class FileUploadTest {
     @Test
     void testFileUploadAndDownload() throws IOException {
         // Загрузка файла через multipart/form-data
-        Path tempFile = Files.createTempFile("test-", ".png");
+        Path testFile = Files.createTempFile("test-", ".png");
         try {
-            Files.write(tempFile, generatedPngBytes);
+            Files.write(testFile, generatedPngBytes);
 
-            APIResponse uploadResponse = request.post("https://httpbin.org/post", RequestOptions.create()
-                    .setMultipart(FormData.create()
-                            .set("file", tempFile.getFileName().toString())));
+            APIResponse uploadResponse = request.post(
+                    "https://httpbin.org/post",
+                    RequestOptions.create().setMultipart(
+                            FormData.create().set("file", testFile)
+                    )
+            );
+
 
             assertTrue(uploadResponse.ok(), "Upload request failed: " + uploadResponse.statusText());
 
@@ -72,7 +76,7 @@ public class FileUploadTest {
             byte[] content = downloadResponse.body();
             assertArrayStartsWithPngSignature(content);
         } finally {
-            Files.deleteIfExists(tempFile);
+            Files.deleteIfExists(testFile);
         }
     }
 
