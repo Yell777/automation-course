@@ -19,7 +19,7 @@ public class DynamicControlsPage {
         return page.locator("#checkbox").isVisible();
     }
 
-    public void waitCheckBovBeHidden() {
+    public void waitCheckBovBeVisible() {
         page.waitForSelector("#checkbox", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN));
     }
 }
